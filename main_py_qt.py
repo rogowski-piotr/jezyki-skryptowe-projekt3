@@ -1,4 +1,4 @@
-from gui import start_app
+from py_qt.gui import start_app
 
 
 if __name__ == "__main__":

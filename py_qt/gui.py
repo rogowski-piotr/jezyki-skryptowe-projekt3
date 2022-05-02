@@ -1,18 +1,16 @@
-import sys
+import sys, os
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
-from FilesList import FilesList
-from InputPopup import AddFileInputPopup
+from py_qt.FilesList import FilesList
+from py_qt.Popups import AddFileInputPopup, AddFolderInputPopup, InfoBox
 
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        # self.path = QtCore.QDir.currentPath()
         self.load(QtCore.QDir.currentPath())
     
     def load(self, path):
-
         self.setWindowTitle("Eksplorator plików")
         self.pagelayout = QVBoxLayout()
         self.browser_layout = QHBoxLayout()
@@ -55,31 +53,31 @@ class MainWindow(QMainWindow):
         widget.setLayout(self.pagelayout)
         self.setCentralWidget(widget)
 
-    def add_file(self):
-        print("adding file")
-        path = self.textbox.text()
-        AddFileInputPopup(path)
-        
-    def add_dir(self):
-        print("adding folder")
 
+    # Obsługa dodawania nowego pliku
+    def add_file(self):
+        AddFileInputPopup(self.textbox.text()).exec()
+        self.stacklayout.currentWidget().update(self.textbox.text())
+
+    # Obsługa dodawania nowego katalogu
+    def add_dir(self):
+        AddFolderInputPopup(self.textbox.text()).exec()
+        self.stacklayout.currentWidget().update(self.textbox.text())
+
+    # Obsługa wyświetlania okienka z informacją o aplikacji
     def about_app(self):
-        # popup
-        print("about app")
+        with open(os.path.join(os.getcwd(), 'shared', 'about_app.txt'), 'r') as f:
+            text = f.read()
+        InfoBox(text)
     
+    # Obsługa przycisku "Przejdź"
     def go_to_path(self):
-        print("go to path")
         self.stacklayout.currentWidget().update(self.textbox.text())
         
 
 def start_app():  
     app = QApplication(sys.argv)
     app.setApplicationName('Eksplorator plików')
-
-    translator = QtCore.QTranslator(app)
-    translator.load("translate/de_DE.qm")
-    app.installTranslator(translator)
-
     main = MainWindow()
     main.resize(1000, 550)
     main.show()

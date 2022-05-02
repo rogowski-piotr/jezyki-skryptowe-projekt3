@@ -1,1 +1,3 @@
 Aplikacja "Eksplorator plików".
+
+Autorem aplikacji jest Piotr Rogowski.

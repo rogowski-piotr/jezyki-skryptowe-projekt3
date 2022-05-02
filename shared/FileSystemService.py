@@ -46,7 +46,8 @@ class FileSystemService:
 
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         # print(f'output: {output.stdout}')
-        if (output.returncode != 0): raise Exception(f'\nCan not execute command: ls -lhra\nReason: {output.stderr}\n')
+        if (output.returncode != 0):
+            raise Exception(f'\nCNie można wykonać operacji: "ls -lhra".\nPowód: {output.stderr}.\n')
         files = self.convert_str_to_files(output.stdout.split('\n'))
         return files
   
@@ -71,7 +72,7 @@ class FileSystemService:
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0: 
             from py_qt.Popups import ErrorBox
-            ErrorBox(f'Nie można wykonać komendy:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr}".')
+            ErrorBox(f'Nie można wykonać operacji:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr[:-1]}".')
         # else:
         #     from py_qt.Popups import InfoBox
         #     InfoBox(f'Poprawnie utworzono plik "{file_name}".')
@@ -83,7 +84,7 @@ class FileSystemService:
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0: 
             from py_qt.Popups import ErrorBox
-            ErrorBox(f'Nie można wykonać komendy:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr}".')
+            ErrorBox(f'Nie można wykonać operacji:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr[:-1]}".')
         # else:
         #     from py_qt.Popups import InfoBox
         #     InfoBox(f'Poprawnie utworzono katalog "{name}".')
@@ -96,7 +97,7 @@ class FileSystemService:
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0: 
             from py_qt.Popups import ErrorBox
-            ErrorBox(f'Nie można wykonać komendy:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr}".')
+            ErrorBox(f'Nie można wykonać operacji:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr[:-1]}".')
         # else:
         #     from py_qt.Popups import InfoBox
         #     InfoBox('Zmiana nazwy przebiegła pomyślnie.')
@@ -110,7 +111,7 @@ class FileSystemService:
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0: 
             from py_qt.Popups import ErrorBox
-            ErrorBox(f'Nie można wykonać komendy:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr}".')
+            ErrorBox(f'Nie można wykonać operacji:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr[:-1]}"')
         # else:
         #     from py_qt.Popups import InfoBox
         #     InfoBox('Usunięcie przebiegło pomyślnie.')

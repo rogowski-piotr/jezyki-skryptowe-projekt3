@@ -59,7 +59,11 @@ class FileSystemService:
 
     # Przejście do podanej ścieżki bezwzględnej
     def goto_path(self, path: str):
-        os.chdir(path)
+        try:
+            os.chdir(path)
+            return 0
+        except FileNotFoundError:
+            return -1
 
     # Pobranie aktualnej ścieżki
     def get_current_workspace(self):

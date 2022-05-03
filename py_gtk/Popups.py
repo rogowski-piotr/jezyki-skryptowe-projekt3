@@ -48,8 +48,13 @@ class AddFileInputPopup(Gtk.Dialog):
     def on_response(self, dialog, response):
         if response == Gtk.ResponseType.OK:
             service = FileSystemService()
-            service.add_new_file(self.path, self.input_box.get_text())
-            self.main_window.refresh_main_window()
+            try:
+                service.add_new_file(self.path, self.input_box.get_text())
+                self.main_window.refresh_main_window()
+            except ValueError as ex:
+                args = ex.args
+                from py_gtk.Popups import error_dialog
+                error_dialog(self.main_window, f'Nie można wykonać operacji:\n{args[0]}.\n\nŚlad błędu:\n"{args[1]}".')
         dialog.destroy()
 
 
@@ -72,8 +77,13 @@ class AddFolderInputPopup(Gtk.Dialog):
     def on_response(self, dialog, response):
         if response == Gtk.ResponseType.OK:
             service = FileSystemService()
-            service.add_new_dir(self.path, self.input_box.get_text())
-            self.main_window.refresh_main_window()
+            try:
+                service.add_new_dir(self.path, self.input_box.get_text())
+                self.main_window.refresh_main_window()
+            except ValueError as ex:
+                args = ex.args
+                from py_gtk.Popups import error_dialog
+                error_dialog(self.main_window, f'Nie można wykonać operacji:\n{args[0]}.\n\nŚlad błędu:\n"{args[1]}".')
         dialog.destroy()
 
 
@@ -97,8 +107,13 @@ class ChangeNamePopup(Gtk.Dialog):
     def on_response(self, dialog, response):
         if response == Gtk.ResponseType.OK:
             service = FileSystemService()
-            service.change_name(self.path, self.old_name, self.input_box.get_text())
-            self.main_window.refresh_main_window()
+            try:
+                service.change_name(self.path, self.old_name, self.input_box.get_text())
+                self.main_window.refresh_main_window()
+            except ValueError as ex:
+                args = ex.args
+                from py_gtk.Popups import error_dialog
+                error_dialog(self.main_window, f'Nie można wykonać operacji:\n{args[0]}.\n\nŚlad błędu:\n"{args[1]}".')
         dialog.destroy()
 
 
@@ -125,7 +140,11 @@ class DeletePopup(Gtk.Dialog):
     def on_response(self, dialog, response):
         if response == Gtk.ResponseType.OK:
             service = FileSystemService()
-            service.change_name(self.path, self.file.name, self.file.type)
-            self.main_window.refresh_main_window()
-        
+            try:
+                service.delete(self.path, self.file.name, self.file.type)
+                self.main_window.refresh_main_window()
+            except ValueError as ex:
+                args = ex.args
+                from py_gtk.Popups import error_dialog
+                error_dialog(self.main_window, f'Nie można wykonać operacji:\n{args[0]}.\n\nŚlad błędu:\n"{args[1]}".')
         dialog.destroy()

@@ -31,7 +31,7 @@ class MyWindow(Gtk.Window):
         menu1.append(current_weather_menu)
         sep = Gtk.SeparatorMenuItem()
         menu1.append(sep)
-        hourly_weather = Gtk.MenuItem("Nowy folder")
+        hourly_weather = Gtk.MenuItem("Nowy katalog")
         hourly_weather.connect("activate", self.add_dir)
         menu1.append(hourly_weather)
 

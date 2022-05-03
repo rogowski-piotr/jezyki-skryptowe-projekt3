@@ -18,7 +18,8 @@ class FilesList(Gtk.Widget):
         self.return_code = 0
         service = FileSystemService()
         if service.goto_path(path) == -1:
-            error_dialog(self.parent_window, "BŁĄÐ elo")
+            error_dialog(self.parent_window, 
+                "Podana ścieżka nie istnieje.\nNie można do niej przejść.")
             self.return_code = -1
         else:
             self.path = path
@@ -64,8 +65,9 @@ class FilesListRow(Gtk.Widget):
         self.hbox.pack_start(Gtk.Label(file.permissions), 1, 1, 0)
 
         options = Gtk.ListStore(int,str)
-        options.append([1,"Zmień nazwę"])
-        options.append([2,"Usuń"])
+        if file.name != '..' and file.name != '.':
+            options.append([1,"Zmień nazwę"])
+            options.append([2,"Usuń"])
         if file.type == 'd':
             options.append([3,"Przejdź"])
         self.combo = Gtk.ComboBox.new_with_model_and_entry(options)
@@ -80,12 +82,10 @@ class FilesListRow(Gtk.Widget):
         id = model[treeiter][0] - 1
 
         if id == 0:         # "Zmień nazwę"
-            print(f"Changing name for {path}/{file.name}")
             ChangeNamePopup(self.parent_window, path, file.name)
             self.parent_window.refresh_main_window()
             
         elif id == 1:       # "Usuń"
-            print(f"Deleting {path}/{file.name}")
             DeletePopup(self.parent_window, path, file)
             self.parent_window.refresh_main_window()
             

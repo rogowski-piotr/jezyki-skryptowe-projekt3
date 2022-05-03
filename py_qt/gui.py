@@ -11,6 +11,7 @@ class MainWindow(QMainWindow):
         self.load(QtCore.QDir.currentPath())
     
     def load(self, path):
+        self.path = path
         self.setWindowTitle("Eksplorator plików")
         self.pagelayout = QVBoxLayout()
         self.browser_layout = QHBoxLayout()
@@ -57,12 +58,12 @@ class MainWindow(QMainWindow):
     # Obsługa dodawania nowego pliku
     def add_file(self):
         AddFileInputPopup(self.textbox.text()).exec()
-        self.stacklayout.currentWidget().update(self.textbox.text())
+        self.stacklayout.currentWidget().update(self, self.textbox.text(), self.path)
 
     # Obsługa dodawania nowego katalogu
     def add_dir(self):
         AddFolderInputPopup(self.textbox.text()).exec()
-        self.stacklayout.currentWidget().update(self.textbox.text())
+        self.stacklayout.currentWidget().update(self, self.textbox.text(), self.path)
 
     # Obsługa wyświetlania okienka z informacją o aplikacji
     def about_app(self):
@@ -72,7 +73,7 @@ class MainWindow(QMainWindow):
     
     # Obsługa przycisku "Przejdź"
     def go_to_path(self):
-        self.stacklayout.currentWidget().update(self.textbox.text())
+        self.stacklayout.currentWidget().update(self, self.textbox.text(), self.path)
         
 
 def start_app():  

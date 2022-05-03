@@ -38,14 +38,12 @@ class FileSystemService:
 
     # Wykonanie komendy 'ls' z parametrami
     def list_files(self, show_hidden=True, sort='extension', alphabetically=True):
-        # print(f'listing files from: {os.getcwd()}')
         cmd = 'ls -lhr'
         cmd += 'a' if show_hidden else ''
         cmd += '' if alphabetically else 'U'
         cmd += f' --sort={sort}'
 
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
-        # print(f'output: {output.stdout}')
         if (output.returncode != 0):
             raise Exception(f'\nCNie można wykonać operacji: "ls -lhra".\nPowód: {output.stderr}.\n')
         files = self.convert_str_to_files(output.stdout.split('\n'))
@@ -74,37 +72,24 @@ class FileSystemService:
         self.goto_path(path)
         cmd = f'touch {file_name}'
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
-        if output.returncode != 0: 
-            from py_qt.Popups import ErrorBox
-            ErrorBox(f'Nie można wykonać operacji:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr[:-1]}".')
-        # else:
-        #     from py_qt.Popups import InfoBox
-        #     InfoBox(f'Poprawnie utworzono plik "{file_name}".')
-
+        if output.returncode != 0:
+            raise ValueError(cmd, output.stderr[:-1])
+            
     # Dodawanie nowego katalogu
     def add_new_dir(self, path, name):
         self.goto_path(path)
         cmd = f'mkdir {name}'
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
-        if output.returncode != 0: 
-            from py_qt.Popups import ErrorBox
-            ErrorBox(f'Nie można wykonać operacji:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr[:-1]}".')
-        # else:
-        #     from py_qt.Popups import InfoBox
-        #     InfoBox(f'Poprawnie utworzono katalog "{name}".')
-    
-
+        if output.returncode != 0:
+            raise ValueError(cmd, output.stderr[:-1])
+           
     # Zmiana nazwy pliku/kataologu
     def change_name(self, path, old_name, new_name):
         self.goto_path(path)
         cmd = f"mv {path}/{old_name} {path}/{new_name}"
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0: 
-            from py_qt.Popups import ErrorBox
-            ErrorBox(f'Nie można wykonać operacji:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr[:-1]}".')
-        # else:
-        #     from py_qt.Popups import InfoBox
-        #     InfoBox('Zmiana nazwy przebiegła pomyślnie.')
+            raise ValueError(cmd, output.stderr[:-1])
 
     # Usuwanie pliku/katalogu
     def delete(self, path, name, file_type):
@@ -114,8 +99,4 @@ class FileSystemService:
             cmd += ' -rf'
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0: 
-            from py_qt.Popups import ErrorBox
-            ErrorBox(f'Nie można wykonać operacji:\n{cmd}.\n\nŚlad błędu:\n"{output.stderr[:-1]}"')
-        # else:
-        #     from py_qt.Popups import InfoBox
-        #     InfoBox('Usunięcie przebiegło pomyślnie.')
+            raise ValueError(cmd, output.stderr[:-1])

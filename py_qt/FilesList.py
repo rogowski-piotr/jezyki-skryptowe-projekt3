@@ -1,46 +1,52 @@
 from PyQt5 import QtWidgets
 from shared.FileSystemService import FileSystemService
-from py_qt.Popups import ChangeNamePopup, Delete
+from py_qt.Popups import ChangeNamePopup, Delete, ErrorBox
 
 
 class FilesList(QtWidgets.QWidget):
     def __init__(self, main_window, path):
         super().__init__()
         self.main_window = main_window
-        self.init_ui(path)
+        self.init_ui(None, path, path)
         # Dodanie widoku do okna (po raz pierwszy)
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.scroll)
 
-    def load(self, path):
+    def load(self, main_window, path, old_path):
         # Update widoku (nowa ścieżka)
-        self.init_ui(path)
+        self.init_ui(main_window, path, old_path)
         # Usunięcie poprzedniego widoku i dodanie nowego
         self.layout.removeItem(self.layout.itemAt(0))
         self.layout.addWidget(self.scroll)
     
     # Układ elementów w oknie
-    def init_ui(self, path):
-        self.path = path
-        mygroupbox = QtWidgets.QGroupBox(path)
-        self.myform = QtWidgets.QFormLayout()
-
+    def init_ui(self, main_window, path, old_path):
         service = FileSystemService()
-        service.goto_path(path)
+        if service.goto_path(path) == -1:
+            ErrorBox("Podana ścieżka nie istnieje.\nNie można do niej przejść.")
+            self.return_code = -1
+            self.path = old_path
+            main_window.textbox.setText(old_path)
+        else:
+            self.path = path
+
         files = service.list_files()
+
+        mygroupbox = QtWidgets.QGroupBox(self.path)
+        self.myform = QtWidgets.QFormLayout()
 
         # Widok zawartości ścieżki w formie tabelki z labelkami i comboboxem
         self.myform.addRow(FilesListHeader(self.main_window).table_header)
         for file in files:
-            self.myform.addRow(FilesListRow(self.main_window, file, path).box)
+            self.myform.addRow(FilesListRow(self.main_window, file, self.path).box)
         
         mygroupbox.setLayout(self.myform)
         self.scroll = QtWidgets.QScrollArea()
         self.scroll.setWidget(mygroupbox)
         self.scroll.setWidgetResizable(True)
 
-    def update(self, path):
-        self.load(path)
+    def update(self, main_window, path, old_path):
+        self.load(main_window, path, old_path)
 
 
 # Klasa reprezentująca wiersz w widoku danego katalogu
@@ -82,6 +88,7 @@ class FilesListRow(QtWidgets.QWidget):
         self.box.addWidget(label)
 
         self.combo = QtWidgets.QComboBox()
+        # if file.name != '..' and file.name != '.':
         self.combo.addItem('Zmień nazwę')
         self.combo.addItem('Usuń')
         if file.type == 'd':
@@ -97,20 +104,23 @@ class FilesListRow(QtWidgets.QWidget):
     def combo_on_click(main_window, name, id, file, path):
         if id == 0:         # "Zmień nazwę"
             ChangeNamePopup(path, file.name).exec()
-            main_window.stacklayout.currentWidget().update(path)
+            try:
+                main_window.stacklayout.currentWidget().update(main_window, path, path)
+            except ValueError:
+                pass
         elif id == 1:       # "Usuń"
             Delete(path, file).exec()
-            main_window.stacklayout.currentWidget().update(path)
+            main_window.stacklayout.currentWidget().update(main_window, path, path)
         elif id == 2:       # "Przejdź" (tylko w katalogach)
             if file.name == '.':
-                main_window.stacklayout.currentWidget().update(path)
+                main_window.stacklayout.currentWidget().update(main_window, path, path)
                 main_window.textbox.setText(path)
             elif file.name == '..':
                 # Ręczne usunięcie, aby nie było dodawanych ".." w ścieżce
-                main_window.stacklayout.currentWidget().update(path[0:path.rfind('/')])
+                main_window.stacklayout.currentWidget().update(main_window, path, path[0:path.rfind('/')])
                 main_window.textbox.setText(path[0:path.rfind('/')])
             else:
-                main_window.stacklayout.currentWidget().update(f'{path}/{file.name}')
+                main_window.stacklayout.currentWidget().update(main_window, path, f'{path}/{file.name}')
                 main_window.textbox.setText(f'{path}/{file.name}')
 
       

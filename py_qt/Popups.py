@@ -43,7 +43,13 @@ class AddFileInputPopup(QDialog):
     
     def create_file(self):
         service = FileSystemService()
-        service.add_new_file(self.path, self.input_box.text())
+        try:
+            service.add_new_file(self.path, self.input_box.text())
+        except ValueError as ex:
+            from py_qt.Popups import ErrorBox
+            args = ex.args
+            ErrorBox(f'Nie można wykonać operacji: "{args[0]}".\n\nŚlad błędu:\n"{args[1]}".')
+            raise ValueError
         self.close()
 
 
@@ -68,9 +74,15 @@ class AddFolderInputPopup(QDialog):
     
     def create_folder(self):
         service = FileSystemService()
-        service.add_new_dir(self.path, self.input_box.text())
+        try:
+            service.add_new_dir(self.path, self.input_box.text())
+        except ValueError as ex:
+            from py_qt.Popups import ErrorBox
+            args = ex.args
+            ErrorBox(f'Nie można wykonać operacji: "{args[0]}".\n\nŚlad błędu:\n"{args[1]}".')
+            raise ValueError
         self.close()
-
+    
 
 # Okienko do obsługi zmiany nazwy
 class ChangeNamePopup(QDialog):
@@ -94,7 +106,12 @@ class ChangeNamePopup(QDialog):
     
     def change_name(self):
         service = FileSystemService()
-        service.change_name(self.path, self.old_name, self.input_box.text())
+        try:
+            service.change_name(self.path, self.old_name, self.input_box.text())
+        except ValueError as ex:
+            from py_qt.Popups import ErrorBox
+            args = ex.args
+            ErrorBox(f'Nie można wykonać operacji: "{args[0]}".\n\nŚlad błędu:\n"{args[1]}".')
         self.close()
 
 
@@ -122,5 +139,12 @@ class Delete(QDialog):
     
     def delete(self):
         service = FileSystemService()
-        service.delete(self.path, self.file.name, self.file.type)
+        try:
+            service.delete(self.path, self.file.name, self.file.type)
+        except ValueError as ex:
+            from py_qt.Popups import ErrorBox
+            args = ex.args
+            ErrorBox(f'Nie można wykonać operacji: "{args[0]}".\n\nŚlad błędu:\n"{args[1]}".')
+            self.close()
+            # raise ValueError
         self.close()

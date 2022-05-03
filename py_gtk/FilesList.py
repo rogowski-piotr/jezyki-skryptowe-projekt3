@@ -4,6 +4,7 @@ from gi.repository import Gtk
 from shared.FileSystemService import FileSystemService
 from shared.FileSystemElement import File
 from py_gtk.Popups import ChangeNamePopup, DeletePopup, error_dialog
+from gi.repository import Pango as pango
 
 
 class FilesList(Gtk.Widget):
@@ -28,7 +29,7 @@ class FilesList(Gtk.Widget):
         
         # Ustawienia tabelki z zawartością katalogu
         self.sw = Gtk.ScrolledWindow()
-        self.table = Gtk.Table(8, len(files))
+        self.table = Gtk.Table(3, len(files))
         self.table.set_row_spacings(10)
         self.table.set_col_spacings(10)
 
@@ -53,16 +54,62 @@ class FilesListRow(Gtk.Widget):
     def __init__(self, parent_window, file, path):
         self.parent_window = parent_window
         self.hbox = Gtk.Box(orientation = Gtk.Orientation.HORIZONTAL, spacing = 10)
+
+        # Nazwa
         label = Gtk.Label(file.name)
         label.set_max_width_chars(20)
-        self.hbox.pack_start(label, 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label(file.type), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label(file.permissions), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label(file.group), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label(file.owner), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label(file.date), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label(file.size), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label(file.permissions), 1, 1, 0)
+        label.set_width_chars(20)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        # Typ
+        label = Gtk.Label(file.type)
+        label.set_max_width_chars(5)
+        label.set_width_chars(5)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        # Uprawnienia
+        label = Gtk.Label(file.permissions)
+        label.set_max_width_chars(15)
+        label.set_width_chars(15)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        # Grupa
+        label = Gtk.Label(file.group)
+        label.set_max_width_chars(15)
+        label.set_width_chars(15)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        # Owner
+        label = Gtk.Label(file.owner)
+        label.set_max_width_chars(15)
+        label.set_width_chars(15)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        # Data
+        label = Gtk.Label(file.date)
+        label.set_max_width_chars(25)
+        label.set_width_chars(25)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        # Rozmiar
+        label = Gtk.Label(file.size)
+        label.set_max_width_chars(10)
+        label.set_width_chars(10)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
 
         options = Gtk.ListStore(int,str)
         if file.name != '..' and file.name != '.':
@@ -74,7 +121,7 @@ class FilesListRow(Gtk.Widget):
         self.combo.set_entry_text_column(1)
         self.combo.connect('changed', lambda combobox : 
             self.combobox_on_change(self.combo, path, file))
-        self.hbox.pack_start(self.combo, 1, 1, 0)
+        self.hbox.pack_start(self.combo, 0, 0, 10)
     
     def combobox_on_change(self, combobox, path, file: File):
         treeiter = combobox.get_active_iter()
@@ -108,11 +155,59 @@ class FilesListRow(Gtk.Widget):
 class FilesListHeader(Gtk.Widget):
     def __init__(self):
         self.hbox = Gtk.Box(orientation = Gtk.Orientation.HORIZONTAL, spacing = 10)
-        self.hbox.pack_start(Gtk.Label('Nazwa'), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label('Typ'), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label('Uprawienia'), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label('Grupa'), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label('Właściciel'), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label('Data'), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label('Rozmiar'), 1, 1, 0)
-        self.hbox.pack_start(Gtk.Label('Opcje'), 1, 1, 0)
+    
+        label = Gtk.Label('Nazwa')
+        label.set_max_width_chars(20)
+        label.set_width_chars(20)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        label = Gtk.Label('Typ')
+        label.set_max_width_chars(5)
+        label.set_width_chars(5)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        label = Gtk.Label('Uprawienia')
+        label.set_max_width_chars(15)
+        label.set_width_chars(15)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        label = Gtk.Label('Grupa')
+        label.set_max_width_chars(15)
+        label.set_width_chars(15)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        label = Gtk.Label('Właściciel')
+        label.set_max_width_chars(15)
+        label.set_width_chars(15)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+
+        label = Gtk.Label('Data')
+        label.set_max_width_chars(25)
+        label.set_width_chars(25)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+    
+        label = Gtk.Label('Rozmiar')
+        label.set_max_width_chars(10)
+        label.set_width_chars(10)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 0)
+        
+        label = Gtk.Label('Opcje')
+        label.set_max_width_chars(20)
+        label.set_width_chars(20)
+        label.set_ellipsize(pango.EllipsizeMode.END)
+        label.set_halign(Gtk.Align.CENTER)
+        self.hbox.pack_start(label, 0, 0, 10)

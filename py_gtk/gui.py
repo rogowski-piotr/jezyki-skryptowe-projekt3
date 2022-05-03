@@ -4,6 +4,7 @@ from gi.repository import Gtk
 import os
 from py_gtk.FilesList import FilesList
 from py_gtk.Popups import info_dialog, AddFileInputPopup, AddFolderInputPopup
+from gi.repository import Pango as pango
 
   
 class MyWindow(Gtk.Window):
@@ -56,6 +57,8 @@ class MyWindow(Gtk.Window):
 
         # Dodanie głównego widoku aplikacji
         self.label = Gtk.Label(self.path)
+        self.label.set_ellipsize(pango.EllipsizeMode.END)
+        self.label.set_alignment(0,0)
         self.main_content_vbox = Gtk.VBox(False, 0)
         self.vbox.pack_end(self.main_content_vbox, True, False, 0)
         self.main_content_vbox.pack_start(self.label, False, True, 1)

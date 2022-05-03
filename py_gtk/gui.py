@@ -53,17 +53,17 @@ class MyWindow(Gtk.Window):
         self.go_button.connect("clicked", self.go_to_path) #, self.files_list)
         self.hbox.pack_start(self.textbox, True, True, 0)
         self.hbox.pack_start(self.go_button, True, True, 0)
-        self.vbox.pack_start(self.hbox, True, False, 0)
+        self.vbox.pack_start(self.hbox, False, False, 0)
 
         # Dodanie głównego widoku aplikacji
         self.label = Gtk.Label(self.path)
-        self.label.set_ellipsize(pango.EllipsizeMode.END)
-        self.label.set_alignment(0,0)
-        self.main_content_vbox = Gtk.VBox(False, 0)
-        self.vbox.pack_end(self.main_content_vbox, True, False, 0)
-        self.main_content_vbox.pack_start(self.label, False, True, 1)
+        # self.label.set_ellipsize(pango.EllipsizeMode.END)
+        self.label.set_alignment(0, 0)
+        self.main_content_vbox = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing = 10)
+        self.main_content_vbox.pack_start(self.label, False, True, 0)
         self.sw = FilesList(self, path).sw
-        self.main_content_vbox.pack_start(self.sw, False, True, 1)
+        self.main_content_vbox.pack_start(self.sw, False, True, 0)
+        self.vbox.pack_end(self.main_content_vbox, True, True, 0)
 
 
     # Obsługa dodawania nowego pliku
@@ -99,6 +99,7 @@ class MyWindow(Gtk.Window):
 def start_app():
     win = MyWindow()
     win.connect("destroy", Gtk.main_quit)
-    win.set_default_size(650, 550)
+    # win.set_default_size(1150, 450)
+    win.set_resizable(True)
     win.show_all()
     Gtk.main()

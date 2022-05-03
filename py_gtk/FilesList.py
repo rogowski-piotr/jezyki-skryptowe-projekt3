@@ -29,7 +29,7 @@ class FilesList(Gtk.Widget):
         
         # Ustawienia tabelki z zawartością katalogu
         self.sw = Gtk.ScrolledWindow()
-        self.table = Gtk.Table(3, len(files))
+        self.table = Gtk.Table(8, len(files))
         self.table.set_row_spacings(10)
         self.table.set_col_spacings(10)
 
@@ -42,6 +42,7 @@ class FilesList(Gtk.Widget):
         
         self.sw.add_with_viewport(self.table)
         self.sw.set_propagate_natural_height(True)
+        self.sw.set_placement(Gtk.CornerType.TOP_RIGHT)
         self.sw.set_propagate_natural_width(True)
 
     # Odświeżanie głównego widoku aplikacji
@@ -54,6 +55,7 @@ class FilesListRow(Gtk.Widget):
     def __init__(self, parent_window, file, path):
         self.parent_window = parent_window
         self.hbox = Gtk.Box(orientation = Gtk.Orientation.HORIZONTAL, spacing = 10)
+        width, height = self.parent_window.get_size()
 
         # Nazwa
         label = Gtk.Label(file.name)
@@ -111,6 +113,7 @@ class FilesListRow(Gtk.Widget):
         label.set_halign(Gtk.Align.CENTER)
         self.hbox.pack_start(label, 0, 0, 0)
 
+        # Opcje
         options = Gtk.ListStore(int,str)
         if file.name != '..' and file.name != '.':
             options.append([1,"Zmień nazwę"])

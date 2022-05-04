@@ -1,3 +1,5 @@
 Aplikacja "Eksplorator plików".
 
-Autorem aplikacji jest Piotr Rogowski.
+Aplikacja została utworzona w ramach przedmiotu "Języki skryptowe i ich zastosowania".
+
+Autorem aplikacji jest Piotr Rogowski, student Politechniki Gdańskiej wydziału ETI.

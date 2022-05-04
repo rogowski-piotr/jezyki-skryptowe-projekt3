@@ -22,6 +22,10 @@ class FilesList(Gtk.Widget):
             error_dialog(self.parent_window, 
                 "Podana ścieżka nie istnieje.\nNie można do niej przejść.")
             self.return_code = -1
+        elif service.goto_path(path) == -2:
+            error_dialog(self.parent_window, 
+                "Brak uprawnień.\nNie można przejść do określonej ścieżki.")
+            self.return_code = -1
         else:
             self.path = path
 

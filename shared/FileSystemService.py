@@ -2,8 +2,6 @@ from itertools import count
 import re
 import os
 from subprocess import PIPE, run
-import random
-from numpy import size
 from shared.FileSystemElement import File
 
 
@@ -62,6 +60,8 @@ class FileSystemService:
             return 0
         except FileNotFoundError:
             return -1
+        except PermissionError:
+            return -2
 
     # Pobranie aktualnej ścieżki
     def get_current_workspace(self):

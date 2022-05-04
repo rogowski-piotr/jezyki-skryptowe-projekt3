@@ -49,7 +49,6 @@ class AddFileInputPopup(QDialog):
             from py_qt.Popups import ErrorBox
             args = ex.args
             ErrorBox(f'Nie można wykonać operacji: "{args[0]}".\n\nŚlad błędu:\n"{args[1]}".')
-            raise ValueError
         self.close()
 
 
@@ -80,7 +79,6 @@ class AddFolderInputPopup(QDialog):
             from py_qt.Popups import ErrorBox
             args = ex.args
             ErrorBox(f'Nie można wykonać operacji: "{args[0]}".\n\nŚlad błędu:\n"{args[1]}".')
-            raise ValueError
         self.close()
     
 

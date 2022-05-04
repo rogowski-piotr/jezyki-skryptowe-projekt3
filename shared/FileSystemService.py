@@ -70,7 +70,7 @@ class FileSystemService:
     # Dodawanie nowego pliku
     def add_new_file(self, path, file_name):
         self.goto_path(path)
-        cmd = f'touch {file_name}'
+        cmd = f"touch '{file_name}'"
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0:
             raise ValueError(cmd, output.stderr[:-1])
@@ -78,7 +78,7 @@ class FileSystemService:
     # Dodawanie nowego katalogu
     def add_new_dir(self, path, name):
         self.goto_path(path)
-        cmd = f'mkdir {name}'
+        cmd = f"mkdir '{name}'"
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0:
             raise ValueError(cmd, output.stderr[:-1])
@@ -86,7 +86,7 @@ class FileSystemService:
     # Zmiana nazwy pliku/kataologu
     def change_name(self, path, old_name, new_name):
         self.goto_path(path)
-        cmd = f"mv {path}/{old_name} {path}/{new_name}"
+        cmd = f"mv {path}/'{old_name}' {path}/'{new_name}'"
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
         if output.returncode != 0: 
             raise ValueError(cmd, output.stderr[:-1])
@@ -94,7 +94,7 @@ class FileSystemService:
     # Usuwanie pliku/katalogu
     def delete(self, path, name, file_type):
         self.goto_path(path)
-        cmd = f"rm {path}/{name}"
+        cmd = f"rm {path}/'{name}'"
         if file_type == 'd':
             cmd += ' -rf'
         output = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)

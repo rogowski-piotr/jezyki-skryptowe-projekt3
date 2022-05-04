@@ -55,6 +55,7 @@ class AddFileInputPopup(Gtk.Dialog):
                 args = ex.args
                 from py_gtk.Popups import error_dialog
                 error_dialog(self.main_window, f'Nie można wykonać operacji:\n{args[0]}.\n\nŚlad błędu:\n"{args[1]}".')
+            
         dialog.destroy()
 
 

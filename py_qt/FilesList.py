@@ -64,7 +64,7 @@ class FilesListRow(QtWidgets.QWidget):
         label = QtWidgets.QLabel(self.file.name)
         label.setToolTip(self.file.name)
         label.setGeometry(0, 0, int(main_window.frameGeometry().width()*0.4), 0)
-        # label.setMinimumWidth(int(main_window.frameGeometry().width()*0.4))
+        label.setFixedWidth(int(main_window.frameGeometry().width()*0.4))
         self.box.addWidget(label)
 
         label = QtWidgets.QLabel(self.file.type)
@@ -125,7 +125,7 @@ class FilesListRow(QtWidgets.QWidget):
                 main_window.stacklayout.currentWidget().update(main_window, path[0:path.rfind('/')], path[0:path.rfind('/')])
                 main_window.textbox.setText(path[0:path.rfind('/')])
             else:
-                main_window.stacklayout.currentWidget().update(main_window, f'{path}/{file.name}', f'{path}/{file.name}')
+                main_window.stacklayout.currentWidget().update(main_window, f"{path}/{file.name}", f"{path}/{file.name}")
                 main_window.textbox.setText(f'{path}/{file.name}')
 
       
@@ -136,7 +136,7 @@ class FilesListHeader(QtWidgets.QWidget):
         self.table_header = QtWidgets.QHBoxLayout()
         label = QtWidgets.QLabel('Nazwa')
         label.setGeometry(0, 0, int(main_window.frameGeometry().width()*0.4), 0)
-        # label.setMinimumWidth(int(main_window.frameGeometry().width()*0.4))
+        label.setFixedWidth(int(main_window.frameGeometry().width()*0.4))
         self.table_header.addWidget(label)
 
         label = QtWidgets.QLabel('Typ')

@@ -102,11 +102,13 @@ class FilesListRow(QtWidgets.QWidget):
         self.combo.setCurrentIndex(-1)
         self.combo.setGeometry(0, 0, int(main_window.frameGeometry().width()*0.15), 0)
         self.combo.activated[str].connect(lambda: FilesListRow.combo_on_click( \
-            self.main_window, self.combo.currentText(), self.combo.currentIndex(), file, path))
+            self.main_window, self.combo.currentIndex(), file, path))
         self.box.addWidget(self.combo)
         
     @staticmethod
-    def combo_on_click(main_window, name, id, file, path):
+    def combo_on_click(main_window, id, file, path):
+        if path[-1] == '/':
+            path = path[0:len(path)-1]
         if id == 0:         # "Zmień nazwę"
             ChangeNamePopup(path, file.name).exec()
             try:

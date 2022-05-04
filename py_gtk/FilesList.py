@@ -131,6 +131,8 @@ class FilesListRow(Gtk.Widget):
         self.hbox.pack_start(self.combo, 0, 0, 10)
     
     def combobox_on_change(self, combobox, path, file: File):
+        if path[-1] == '/':
+            path = path[0:len(path)-1]
         treeiter = combobox.get_active_iter()
         model = combobox.get_model()
         id = model[treeiter][0] - 1

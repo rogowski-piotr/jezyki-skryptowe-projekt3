@@ -78,7 +78,7 @@ class MyWindow(Gtk.Window):
     def about_app(self, _):
         with open(os.path.join(os.getcwd(), 'shared', 'about_app.txt'), 'r') as f:
             text = f.read()
-        info_dialog(text)
+        info_dialog(self, text)
     
     # Obsługa przejścia do innej ścieżki
     def go_to_path(self, _):
